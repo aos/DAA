@@ -22,8 +22,4 @@ function integerMult(numOne, numTwo) {
   return result + integerMult(numOne, nextNum);
 }
 
-function karatsuba(numOne, numTwo) {
-
-}
-
 console.log(integerMult(5211986647570828172548043773141856795012425179839383045438476733, 4606712684935304570646997185447986666259678494439329643332680432));
