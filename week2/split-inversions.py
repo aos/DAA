@@ -39,7 +39,16 @@ def merge_count_split_inv(b, c):
 
     return result, count
 
-r, c = sort_count([9, 6, 5, 4, 3, 2])
-print([9, 6, 5, 4, 3, 2], "=> Number of inversions:", c)
-s, d = sort_count([5, 2, 3, 4, 6, 9])
-print([5, 2, 3, 4, 6, 9], "=> Number of inversions:", d)
+# r, c = sort_count([9, 6, 5, 4, 3, 2])
+# print([9, 6, 5, 4, 3, 2], "=> Number of inversions:", c)
+# s, d = sort_count([5, 2, 3, 4, 6, 9])
+# print([5, 2, 3, 4, 6, 9], "=> Number of inversions:", d)
+
+# Test Array
+fd = open('TestIntegerArray.txt')
+arr = []
+for line in fd:
+    arr.append(int(line))
+
+r, c = sort_count(arr)
+print("Number of inversions:", c)
