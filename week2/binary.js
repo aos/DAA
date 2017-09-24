@@ -7,19 +7,20 @@
  * Note: assume sorted array as input
 */
 
-const binarySearch = (array, value) => {
-  const mid = Math.floor(array.length / 2)
+const binarySearch = (array, value, s = 0, e = array.length) => {
+  const length = e - s;
+  const mid = Math.floor((e + s) / 2);
 
   if (value == array[mid]) {
-    return array[mid];
+    return mid;
   }
 
-  else if (value > array[mid] && array.length > 1) {
-    return binarySearch(array.slice(mid), value);
+  else if (value > array[mid] && length > 1) {
+    return binarySearch(array, value, mid, e);
   }
 
-  else if (value < array[mid] && array.length > 1) {
-    return binarySearch(array.slice(0, mid), value);
+  else if (value < array[mid] && length > 1) {
+    return binarySearch(array, value, s, mid);
   }
 
   else {
@@ -27,4 +28,4 @@ const binarySearch = (array, value) => {
   }
 }
 
-console.log(binarySearch([1, 2, 3, 4, 5, 6, 7], 3));
+console.log(binarySearch([1, 2, 3, 4, 5, 6, 7], 8));
