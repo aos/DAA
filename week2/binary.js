@@ -6,26 +6,27 @@
  *
  * Note: assume sorted array as input
 */
+const fs = require('fs');
 
 const binarySearch = (array, value, s = 0, e = array.length) => {
-  const length = e - s;
   const mid = Math.floor((e + s) / 2);
 
-  if (value == array[mid]) {
-    return mid;
+  if (s >= e) {
+    return -1;
   }
 
-  else if (value > array[mid] && length > 1) {
-    return binarySearch(array, value, mid, e);
+  if (value > array[mid]) {
+    return binarySearch(array, value, mid + 1, e);
   }
 
-  else if (value < array[mid] && length > 1) {
-    return binarySearch(array, value, s, mid);
+  if (value < array[mid]) {
+    return binarySearch(array, value, s, mid - 1);
   }
 
-  else {
-    return false;
-  }
+  return mid;
 }
 
-console.log(binarySearch([1, 2, 3, 4, 5, 6, 7], 8));
+const arr = [];
+fs.readFileSync('TestIntegerArray.txt', 'utf-8').split("\n").forEach(x => arr.push(parseInt(x)));
+
+console.log(arr);
