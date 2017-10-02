@@ -19,3 +19,8 @@ RSelect(array A, length n, order statistic i):
 ```
 
 ## Randomized Selection Analysis
+
+### Tracking progress via phases
+**Notation**: `RSelect` is in `phase j` if current array size is between `((3/4)^(j + 1)) * n` and `((3/4)^j) * n`  
+- `X_j` = number of recursive calls during `phase j`
+- Running time of `RSelect` ≤ `Σ (X_j · c · ((3/4)^j)n)`

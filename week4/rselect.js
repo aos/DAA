@@ -11,7 +11,7 @@ function rSelect(array, i, l = 0, r = array.length - 1) {
   if (i === 0 || i > array.length) return -1;
 
   // Base case
-  if ((r - l) == 0) return array[l];
+  if (r - l == 0) return array[l];
 
   // Partition around a random pivot
   const pIndex = randomPartition(array, l, r);
@@ -57,5 +57,12 @@ function partition(array, l, r) {
 const swap = (array, i, j) => [array[i], array[j]] = [array[j], array[i]];
 
 /* Test cases */
+const fs = require('fs');
+
 const arr = [19, 4, 3, 2, 1, 9, 6, 7, 15];
 console.log(rSelect(arr, 5));
+
+const arrTwo = [];
+fs.readFileSync('../week3/TextArray.txt', 'utf-8').split('\n').forEach(x => { if (parseInt(x)) { arrTwo.push(parseInt(x)) } });
+const comp = rSelect(arrTwo, 6521);
+console.log(comp);
