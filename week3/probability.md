@@ -51,3 +51,16 @@ Sample space `Ω` = all `n^n` assignments of processes to servers, each equally 
 Let `Y` = total number of processes assigned to first server
 
 *Goal*: Compute `E[Y]`
+
+## Concept #6 - Conditional Probability
+`Let X, Y ∈ Ω` be events
+
+- Then Pr[X | Y] ("X given Y") = `Pr[X ∩ Y] / Pr[Y]`
+- The portion of Y filled with X ⇒ `X ∩ Y` 
+
+## Concept #7 - Independence (of Events)
+**Definition**: Events `X, Y ⊆ Ω` are *independent* if (and only if) `Pr[X ∩ Y] = Pr[X] · Pr[Y]`
+
+### Independence (of Random Variables)
+**Definition**: Random variables `A, B` (both defined on `Ω`) are *independent*.  
+The events Pr[A = a], Pr[B = b] are independent for all a, b.
