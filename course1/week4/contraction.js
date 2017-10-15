@@ -45,7 +45,7 @@ function contraction(aList) {
 }
 
 /* Helper functions */
-const {GraphPrototype, buildGraph} = require('./graph');
+const {GraphPrototype, buildGraphFromFile} = require('./graph');
 
 const getVertices = (list) => Object.keys(list);
 const getRandomArrEntry = (arr) => arr[Math.floor(Math.random() * arr.length)];
