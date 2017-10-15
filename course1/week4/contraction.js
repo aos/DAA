@@ -55,7 +55,7 @@ const cutLength = (list) => list[Object.keys(list)[0]].length;
 const findMinCut = (file, iterations) => {
   let min = Number.MAX_SAFE_INTEGER;
   for (let i = 0; i < iterations; i++) {
-    const newGraph = buildGraph(file);
+    const newGraph = buildGraphFromFile(file);
     min = Math.min(cutLength(contraction(newGraph)), min);
   }
   return min;
