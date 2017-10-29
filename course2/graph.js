@@ -12,11 +12,12 @@ function Graph() {
     if (adjList[v].indexOf(w) === -1) {
       adjList[v].push(w);
     }
-    if (adjList[w]) {
-      if (adjList[w].indexOf(v) === -1) {
-        adjList[w].push(v);
-      }
-    }
+    // Commented out for directed graphs
+    // if (adjList[w]) {
+    //   if (adjList[w].indexOf(v) === -1) {
+    //     adjList[w].push(v);
+    //   }
+    // }
   }
 
   this.getList = function() {

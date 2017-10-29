@@ -1,30 +1,8 @@
 // Breadth-first search implementation
 
 const Queue = require('../queue');
-const {GraphPrototype} = require('../graph');
 
-const myGraph = new GraphPrototype();
-
-/* Build graph */
-myGraph.addVertex('S');
-myGraph.addVertex('A');
-myGraph.addVertex('B');
-myGraph.addVertex('C');
-myGraph.addVertex('D');
-myGraph.addVertex('E');
-
-myGraph.addEdge('S', 'A');
-myGraph.addEdge('S', 'B');
-myGraph.addEdge('A', 'C');
-myGraph.addEdge('B', 'C');
-myGraph.addEdge('B', 'D');
-myGraph.addEdge('C', 'D');
-myGraph.addEdge('C', 'E');
-myGraph.addEdge('D', 'E');
-
-const list = myGraph.getList();
-
-function BFS(graph, start) {
+module.exports = function BFS(graph, start) {
   const explored = {};
   const dist = {};
   const myQueue = new Queue();
@@ -57,5 +35,3 @@ function BFS(graph, start) {
     }
   }
 }
-
-BFS(list, 'A');
