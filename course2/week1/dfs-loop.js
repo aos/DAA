@@ -3,53 +3,87 @@
 const DFSLoop = (graph) => {
   // Reverse the graph
   const reversed = reverseG(graph);
+  const stack = [];
   // Count how many nodes we've explored totally
   // For finishing times in 1st pass
-  const t = 0;
+  let t = 0;
   // Most recent vertex from which a DFS was initiated
   // For leaders in 2nd pass
-  const s = null;
+  let s = null;
   
   const finish = {}; // Finishing times
-  const explored = {}; // Explored vertices
+  const exploreOne = {}; // Explored vertices
+  const exploreTwo = {}; // Explored vertices
   const leader = {}; // Leader tracking
 
   // Initialize all vertices
-  for (const vertex in revG) {
-    explored[vertex] = false;
+  for (const vertex in reversed) {
+    exploreOne[vertex] = false;
+    exploreTwo[vertex] = false;
     finish[vertex] = Number.NEGATIVE_INFINITY;
   }
-  // Assume nodes labeled (1 to n)
-  // For i = n downto 1
-  for (const vertex in revG) {
+
+  // First pass -- reversed graph, gather finishing times
+  for (const vertex in reversed) {
     // if i is not yet explored
-    if (!explored[vertex]) {
-      // s := i
-      s = vertex;
+    if (!exploreOne[vertex]) {
       // DFS(G, i)
-      DFS(reversed, vertex);
+      DFS(reversed, vertex, 1);
     }
   }
 
-  const DFS = (graph, i) => {
+  // Second pass -- in decreasing order of finishing times, gather leaders
+  while (stack.length > 0) {
+    const vert = stack.pop();  
+    if (!exploreTwo[vert]) {
+      // s := i
+      s = vert;
+      DFS(graph, vert, 2);
+    }
+  }
+
+  function DFS(graph, i, pass) {
     // Mark i as explored
-    explored[i] = true;
-    // set leader(i) := s
-    leader[i] = s;
+    if (pass === 1) {
+      exploreOne[i] = true;
+    }
+    else if (pass === 2) {
+      // set leader(i) := s
+      leader[i] = s;
+      exploreTwo[i] = true;
+    }
+
     // for each arc (i, j) ∈ G:
     const neighbors = graph[i];
     for (let j = 0; j < neighbors.length; j++) {
       // if j not yet explored:
-      if (!explored[j]) {
-        // DFS(G, j)
-        DFS(graph, j);
+      if (pass === 1) {
+        if (!exploreOne[neighbors[j]]) {
+          // DFS(G, j)
+          DFS(graph, neighbors[j], 1);
+        }
+      }
+      else if (pass === 2) {
+        if (!exploreTwo[neighbors[j]]) {
+          // DFS(G, j)
+          DFS(graph, neighbors[j], 2);
+        }
       }
     }
-    // t += 1
-    t += 1;
-    // set f(i) := t
-    finish[i] = t;
+
+    if (pass === 1) {
+      // t += 1
+      t += 1;
+      // set f(i) := t
+      finish[i] = t;
+      // Push on to stack by order of finishing time (for second pass)
+      stack.push(i);
+    }
   }
+  return {
+    finish,
+    leader
+  };
 }
 
 // DAG reversal algorithm
@@ -73,13 +107,15 @@ const reverseG = (graph) => {
 
 // Adjacency list
 const adjList = {
-  1: [4],
-  4: [7],
-  7: [1],
-  9: [3, 7],
-  3: [6],
-  6: [9],
-  8: [6, 5],
-  2: [8],
-  5: [2]
+  A: ['B'],
+  B: ['C'],
+  C: ['A', 'D'],
+  D: ['F', 'G'],
+  E: ['D'],
+  F: ['E'],
+  G: ['I'],
+  H: ['G'],
+  I: ['H']
 }
+
+console.log(DFSLoop(adjList));
