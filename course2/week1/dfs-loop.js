@@ -1,28 +1,20 @@
 const LineByLineReader = require('line-by-line');
 
 // DFS-Loop
-
 const DFSLoop = (graph) => {
   // Reverse the graph
   const reversed = reverseG(graph);
   const stack = [];
-  // Count how many nodes we've explored totally
-  // For finishing times in 1st pass
-  let t = 0;
   // Most recent vertex from which a DFS was initiated
-  // For leaders in 2nd pass
   let s = null;
-  
-  const finish = {}; // Finishing times
-  const exploreOne = {}; // Explored vertices
-  const exploreTwo = {}; // Explored vertices
+  const exploreOne = {}; // Explored vertices first pass
+  const exploreTwo = {}; // Explored vertices second pass
   const leader = {}; // Leader tracking
 
   // Initialize all vertices
   for (const vertex in reversed) {
     exploreOne[vertex] = false;
     exploreTwo[vertex] = false;
-    finish[vertex] = Number.NEGATIVE_INFINITY;
   }
 
   // First pass -- reversed graph, gather finishing times
@@ -33,7 +25,6 @@ const DFSLoop = (graph) => {
       DFS(reversed, vertex, 1);
     }
   }
-
   // Second pass -- in decreasing order of finishing times, gather leaders
   while (stack.length > 0) {
     const vert = stack.pop();  
@@ -44,37 +35,46 @@ const DFSLoop = (graph) => {
     }
   }
 
-  function DFS(graph, i, pass) {
+  // Iterative
+  function iterDFS(graph, i, pass) {
+    const vertStack = [];
     if (pass === 1) {
       exploreOne[i] = true;
     }
+    else {
+      leader[i] = s;
+      exploreTwo[i] = true;
+    }
+    vertStack.push(i);
+    while (vertStack.length > 0) {
+      const start = vertStack.pop();
+      const neighbors = graph[start];
+      for (const v of neighbors) {
+        if (pass === 1) {
+          if (!exploreOne[v]) iterDFS(graph, v, 1);
+        }
+        else {
+          if (!exploreTwo[v]) iterDFS(graph, v, 2);
+        }
+      }
+    }
+    if (pass === 1) stack.push(i);
+  }
+  // Recursive
+  function DFS(graph, i, pass) {
+    if (pass === 1) exploreOne[i] = true;
     else if (pass === 2) {
       leader[i] = s;
       exploreTwo[i] = true;
     }
     // for each arc (i, j) ∈ G:
     const neighbors = graph[i];
-    // Guard against solitary vertices
-    if (neighbors) {
-      for (let j = 0; j < neighbors.length; j++) {
-        if (pass === 1) {
-          if (!exploreOne[neighbors[j]]) {
-            DFS(graph, neighbors[j], 1);
-          }
-        }
-        else if (pass === 2) {
-          if (!exploreTwo[neighbors[j]]) {
-            DFS(graph, neighbors[j], 2);
-          }
-        }
-      }
+    for (const v of neighbors) {
+      if (pass === 1 && !exploreOne[v]) DFS(graph, v, 1);
+      else if (pass === 2 && !exploreTwo[v]) DFS(graph, v, 2);
     }
-    if (pass === 1) {
-      t += 1;
-      finish[i] = t;
-      // Push on to stack by order of finishing time (for second pass)
-      stack.push(i);
-    }
+    // Push on to stack by order of finishing time (for second pass)
+    if (pass === 1) stack.push(i);
   }
   return leader;
 }
@@ -85,53 +85,41 @@ const reverseG = (graph) => {
   const rev = {};
   for (const vertex in graph) {
     const neighbors = graph[vertex];
-    // Guard against solitary vertices
-    if (neighbors) {
-      for (let i = 0; i < neighbors.length; i++) {
-        if (!rev.hasOwnProperty(neighbors[i])) {
-          rev[neighbors[i]] = [vertex];
-        }
-        else {
-          rev[neighbors[i]].push(vertex);
-        }
+    for (const v of neighbors) {
+      if (!rev.hasOwnProperty(v)) {
+        rev[v] = new Set([vertex]);
+      }
+      else {
+        rev[v].add([vertex]);
       }
     }
   }
   return rev;
 }
 
-// Adjacency list
-const adjList = {
-  A: ['B'],
-  B: ['C'],
-  C: ['A', 'D'],
-  D: ['F', 'G'],
-  E: ['D'],
-  F: ['E'],
-  G: ['I'],
-  H: ['G'],
-  I: ['H']
-}
-
 function computeSCCs(file) {
-  const lr = new LineByLineReader(file, {skipEmptyLines: true});
+  const lr = new LineByLineReader(file);
   const graph = {};
-  let lines = 0;
+  process.stdout.write('Building graph from file... ');
 
   // Build adjancency list from file
   lr.on('line', (line) => {
     const splitLine = line.split(/\s/);
     const vert = splitLine[0];
-    graph[vert] = [];
-    for (let i = 1; i < splitLine.length; i++) {
-      graph[vert].push(splitLine[i]);
+    if (!graph.hasOwnProperty(vert)) {
+      graph[vert] = new Set(); 
     }
+    graph[vert].add([splitLine[1]]);
   });
 
   lr.on('end', () => {
+    console.log('Done.');
+    process.stdout.write('Computing SCCs... ');
     const result = DFSLoop(graph);
+    console.log('Done.');
     const counter = {};
 
+    process.stdout.write('Building results...');
     for (const lead in result) {
       if (counter.hasOwnProperty(result[lead])) {
         counter[result[lead]]++;
@@ -140,8 +128,9 @@ function computeSCCs(file) {
         counter[result[lead]] = 1;
       }
     }
-    return console.log(Object.values(counter));
+    console.log('Done.');
+    return console.log(Object.values(counter).filter(i => i > 1));
   });
 }
 
-computeSCCs('./input');
+computeSCCs('./_410e934e6553ac56409b2cb7096a44aa_SCC.txt');
