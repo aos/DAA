@@ -4,7 +4,8 @@ const LineByLineReader = require('line-by-line');
 const DFSLoop = (graph) => {
   // Reverse the graph
   const reversed = reverseG(graph);
-  const stack = [];
+  // Finishing times stack
+  const finish = [];
   // Most recent vertex from which a DFS was initiated
   let s = null;
   const exploreOne = {}; // Explored vertices first pass
@@ -69,9 +70,12 @@ const DFSLoop = (graph) => {
     }
     // for each arc (i, j) ∈ G:
     const neighbors = graph[i];
-    for (const v of neighbors) {
-      if (pass === 1 && !exploreOne[v]) DFS(graph, v, 1);
-      else if (pass === 2 && !exploreTwo[v]) DFS(graph, v, 2);
+    // Guard against solitary vertices
+    if (neighbors) {
+      for (const v of neighbors) {
+        if (pass === 1 && !exploreOne[v]) DFS(graph, v, 1);
+        else if (pass === 2 && !exploreTwo[v]) DFS(graph, v, 2);
+      }
     }
     // Push on to stack by order of finishing time (for second pass)
     if (pass === 1) stack.push(i);
@@ -119,7 +123,7 @@ function computeSCCs(file) {
     console.log('Done.');
     const counter = {};
 
-    process.stdout.write('Building results...');
+    process.stdout.write('Building results... ');
     for (const lead in result) {
       if (counter.hasOwnProperty(result[lead])) {
         counter[result[lead]]++;
@@ -129,8 +133,10 @@ function computeSCCs(file) {
       }
     }
     console.log('Done.');
-    return console.log(Object.values(counter).filter(i => i > 1));
+    return console.log(Object.values(counter)
+            .sort((a, b) => (b - a))
+            .slice(0, 5));
   });
 }
 
-computeSCCs('./_410e934e6553ac56409b2cb7096a44aa_SCC.txt');
+const SCCs = computeSCCs('./_410e934e6553ac56409b2cb7096a44aa_SCC.txt');

@@ -9,7 +9,7 @@ Notes, problem sets, misc. for Stanford's [Design and Analysis of Algorithms](ht
 - [x] Week 4: Randomized Selection, Graphs, Minimum Cut (Randomized Contraction)
 
 #### Course 2: Graph Search, Shortest Paths, and Data Structures
-- [ ] Week 1: BFS, DFS, Computing Strong Components
+- [x] Week 1: BFS, DFS, Computing Strong Components
 - [ ] Week 2: Dijkstra's Shortest Path
 - [ ] Week 3: Heaps, Balanced Binary Search Trees
 - [ ] Week 4: Hashing, Hash Tables, Bloom Filters 
