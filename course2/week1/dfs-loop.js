@@ -1,3 +1,5 @@
+const LineByLineReader = require('line-by-line');
+
 // DFS-Loop
 
 const DFSLoop = (graph) => {
@@ -43,47 +45,38 @@ const DFSLoop = (graph) => {
   }
 
   function DFS(graph, i, pass) {
-    // Mark i as explored
     if (pass === 1) {
       exploreOne[i] = true;
     }
     else if (pass === 2) {
-      // set leader(i) := s
       leader[i] = s;
       exploreTwo[i] = true;
     }
-
     // for each arc (i, j) ∈ G:
     const neighbors = graph[i];
-    for (let j = 0; j < neighbors.length; j++) {
-      // if j not yet explored:
-      if (pass === 1) {
-        if (!exploreOne[neighbors[j]]) {
-          // DFS(G, j)
-          DFS(graph, neighbors[j], 1);
+    // Guard against solitary vertices
+    if (neighbors) {
+      for (let j = 0; j < neighbors.length; j++) {
+        if (pass === 1) {
+          if (!exploreOne[neighbors[j]]) {
+            DFS(graph, neighbors[j], 1);
+          }
         }
-      }
-      else if (pass === 2) {
-        if (!exploreTwo[neighbors[j]]) {
-          // DFS(G, j)
-          DFS(graph, neighbors[j], 2);
+        else if (pass === 2) {
+          if (!exploreTwo[neighbors[j]]) {
+            DFS(graph, neighbors[j], 2);
+          }
         }
       }
     }
-
     if (pass === 1) {
-      // t += 1
       t += 1;
-      // set f(i) := t
       finish[i] = t;
       // Push on to stack by order of finishing time (for second pass)
       stack.push(i);
     }
   }
-  return {
-    finish,
-    leader
-  };
+  return leader;
 }
 
 // DAG reversal algorithm
@@ -92,13 +85,15 @@ const reverseG = (graph) => {
   const rev = {};
   for (const vertex in graph) {
     const neighbors = graph[vertex];
-
-    for (let i = 0; i < neighbors.length; i++) {
-      if (!rev.hasOwnProperty(neighbors[i])) {
-        rev[neighbors[i]] = [vertex];
-      }
-      else {
-        rev[neighbors[i]].push(vertex);
+    // Guard against solitary vertices
+    if (neighbors) {
+      for (let i = 0; i < neighbors.length; i++) {
+        if (!rev.hasOwnProperty(neighbors[i])) {
+          rev[neighbors[i]] = [vertex];
+        }
+        else {
+          rev[neighbors[i]].push(vertex);
+        }
       }
     }
   }
@@ -118,4 +113,35 @@ const adjList = {
   I: ['H']
 }
 
-console.log(DFSLoop(adjList));
+function computeSCCs(file) {
+  const lr = new LineByLineReader(file, {skipEmptyLines: true});
+  const graph = {};
+  let lines = 0;
+
+  // Build adjancency list from file
+  lr.on('line', (line) => {
+    const splitLine = line.split(/\s/);
+    const vert = splitLine[0];
+    graph[vert] = [];
+    for (let i = 1; i < splitLine.length; i++) {
+      graph[vert].push(splitLine[i]);
+    }
+  });
+
+  lr.on('end', () => {
+    const result = DFSLoop(graph);
+    const counter = {};
+
+    for (const lead in result) {
+      if (counter.hasOwnProperty(result[lead])) {
+        counter[result[lead]]++;
+      }
+      else {
+        counter[result[lead]] = 1;
+      }
+    }
+    return console.log(Object.values(counter));
+  });
+}
+
+computeSCCs('./input');
