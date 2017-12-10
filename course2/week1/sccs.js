@@ -27,8 +27,8 @@ const DFSLoop = (graph) => {
     }
   }
   // Second pass -- in decreasing order of finishing times, gather leaders
-  while (stack.length > 0) {
-    const vert = stack.pop();  
+  while (finish.length > 0) {
+    const vert = finish.pop();  
     if (!exploreTwo[vert]) {
       // s := i
       s = vert;
@@ -59,7 +59,7 @@ const DFSLoop = (graph) => {
         }
       }
     }
-    if (pass === 1) stack.push(i);
+    if (pass === 1) finish.push(i);
   }
   // Recursive
   function DFS(graph, i, pass) {
@@ -78,7 +78,7 @@ const DFSLoop = (graph) => {
       }
     }
     // Push on to stack by order of finishing time (for second pass)
-    if (pass === 1) stack.push(i);
+    if (pass === 1) finish.push(i);
   }
   return leader;
 }
@@ -139,4 +139,4 @@ function computeSCCs(file) {
   });
 }
 
-const SCCs = computeSCCs('./_410e934e6553ac56409b2cb7096a44aa_SCC.txt');
+const SCCs = computeSCCs('./input_mostlyCycles_68_320000.txt');
