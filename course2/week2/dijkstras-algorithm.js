@@ -96,12 +96,7 @@ function computeDijkstras(file) {
     const result = dijkstra(graph, 1, lengths);
     console.log('Done.');
     const req = [7, 37, 59, 82, 99, 115, 133, 165, 188, 197];
-    const parsed = [];
-    for (const v in result.distanceFromSource) {
-      if (req.includes(parseInt(v))) {
-        parsed.push(result.distanceFromSource[v]);
-      }
-    }
+    const parsed = req.map(i => result.distanceFromSource[i])
     console.log(parsed);
   });
 }
