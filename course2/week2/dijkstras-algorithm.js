@@ -70,7 +70,7 @@ function computeDijkstras(file) {
   const lengths = [];
   process.stdout.write('Building graph and lengths matrix from file... ');
 
-  // Build adjancency list from file
+  // Build adjacency list from file
   lr.on('line', (line) => {
     const splitLine = line.split(/\s/);
     const vert = parseInt(splitLine[0]);
