@@ -1,3 +1,8 @@
+# A min-heap is a rooted, binary, tree, as complete as possible
+
+# All operations (insert, extract-min) must satisfy the heap property:
+# Every node must be less than or equal to its children
+# The root therefore contains the most minimum value
 class MinHeap
 
   def initialize
@@ -38,7 +43,25 @@ class MinHeap
     
     # 3. Satisfy heap property (bubble-down):
     # Move the new root down the tree as long as it is
-    # larger than its parent(s)
+    # larger than its parent(s), making sure along the way
+    # that we have not reached any terminating leaves
+    while min_child(new_r_i) && (@nodes[new_r_i] > @nodes[min_child(new_r_i)])
+      temp_i = min_child(new_r_i)
+      swap(new_r_i, temp_i)
+      new_r_i = temp_i
+      break unless new_r_i
+    end
+    root
+  end
+
+  def heapsort_and_empty
+    raise Exception, 'Insert values into heap before sorting' if empty?
+    sorted = []
+    
+    while !empty?
+      sorted << extract_min
+    end
+    sorted
   end
 
   def size
@@ -60,7 +83,19 @@ class MinHeap
 
   # Get the smaller child node index
   def min_child(index)
+    ch_e = (index + 1) * 2
+    ch_o = (index * 2) + 1
 
+    if @nodes[ch_e] && @nodes[ch_o]
+      @nodes[ch_e] > @nodes[ch_o] ? ch_o : ch_e
+    elsif @nodes[ch_e]
+      ch_e
+    elsif @nodes[ch_o]
+      ch_o
+    else
+      nil
+    end
+  end
 
   # Swap elements in array
   def swap(p_i, c_i)
