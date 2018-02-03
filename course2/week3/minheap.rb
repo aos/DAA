@@ -9,7 +9,8 @@ class MinHeap
     @nodes = []
   end
   
-  def insert(n)
+  def insert(key, value)
+    n = Hash[key: key, value: value]
     # 1. Append to end
     @nodes << n
     # We need to keep track of inserted node's index
@@ -21,7 +22,7 @@ class MinHeap
     # Move the newly inserted node up the tree as long as
     # it is smaller than its parent
     unless size == 1
-      while @nodes[ins_i] < @nodes[parent(ins_i)] 
+      while @nodes[ins_i][:value] < @nodes[parent(ins_i)][:value]
         swap(parent(ins_i), ins_i)
         ins_i = parent(ins_i)
         break if ins_i == 0
@@ -45,7 +46,8 @@ class MinHeap
     # Move the new root down the tree as long as it is
     # larger than its parent(s), making sure along the way
     # that we have not reached any terminating leaves
-    while min_child(new_r_i) && (@nodes[new_r_i] > @nodes[min_child(new_r_i)])
+    while min_child(new_r_i) && 
+          (@nodes[new_r_i][:value] > @nodes[min_child(new_r_i)][:value])
       temp_i = min_child(new_r_i)
       swap(new_r_i, temp_i)
       new_r_i = temp_i
@@ -54,11 +56,19 @@ class MinHeap
     root
   end
 
+  def delete(k)
+    # TODO: Implement this
+  end
+
+  def peek_min
+    @nodes[0]
+  end
+
   def heapsort_and_empty
     raise Exception, 'Insert values into heap before sorting' if empty?
     sorted = []
     
-    while !empty?
+    until empty?
       sorted << extract_min
     end
     sorted
@@ -87,7 +97,7 @@ class MinHeap
     ch_o = (index * 2) + 1
 
     if @nodes[ch_e] && @nodes[ch_o]
-      @nodes[ch_e] > @nodes[ch_o] ? ch_o : ch_e
+      @nodes[ch_e][:value] > @nodes[ch_o][:value] ? ch_o : ch_e
     elsif @nodes[ch_e]
       ch_e
     elsif @nodes[ch_o]

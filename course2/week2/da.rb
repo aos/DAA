@@ -1,11 +1,13 @@
 require_relative '../rds/pqueue.rb'
 require_relative '../rds/graph_builder.rb'
+require_relative '../week3/minheap.rb'
 
 class Dijkstra
   
   def initialize(file_name)
     @graph = GraphBuilder.new(file_name).build
-    @pq = PriorityQueue.new
+    # @pq = PriorityQueue.new
+    @heap = MinHeap.new
     @dist = Hash.new(Float::INFINITY)
     @preds = Hash.new
   end
@@ -13,14 +15,17 @@ class Dijkstra
   def find_shortest(source = 1)
     # Initialize source vertex
     @dist[source] = 0
-    @pq.enqueue(source, @dist[source])
+    # @pq.enqueue(source, @dist[source])
+    @heap.insert(source, @dist[source])
 
     # Get adjacency list and lengths
     adj_list = @graph.get_list
     edge_lengths = @graph.get_lengths
 
-    while !@pq.empty?
-      curr = @pq.dequeue[:item]
+    # until @pq.empty?
+    until @heap.empty?
+      # curr = @pq.dequeue[:item]
+      curr = @heap.extract_min[:key]
       # Get neighboring vertices
       neighbors = adj_list[curr]
       # '&.' is safe navigation operator -- only called if 'neighbors' exists
@@ -33,7 +38,8 @@ class Dijkstra
         if tent_dist < @dist[vert]
           @dist[vert] = tent_dist
           @preds[vert] = curr
-          @pq.enqueue(vert, @dist[vert])
+          # @pq.enqueue(vert, @dist[vert])
+          @heap.insert(vert, @dist[vert])
         end
       end
     end
