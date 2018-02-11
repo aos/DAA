@@ -28,16 +28,17 @@ class BinarySearchTree
       right.each(&block) if right
     end
 
-    def remove_left
-      remove_instance_variable(:@left)
+    [:@left, :@right, :@parent].each do |a|
+      m = a.to_s.gsub('@', '')
+      define_method "remove_#{m}" do
+        remove_instance_variable(a)
+      end
     end
 
-    def remove_right
-      remove_instance_variable(:@right)
-    end
-
-    def remove_parent
-      remove_instance_variable(:@parent)
+    def remove_all
+      remove_left
+      remove_right
+      remove_parent
     end
 
     def <=>(other_node)
@@ -75,24 +76,38 @@ class BinarySearchTree
     current = search(val)
     return if current.nil?
 
+    binding.pry
     # Easy case - no children
     if current.empty?
-      p = current.parent
-      p.remove_left if p > current
-      p.remove_right if p < current
+      parent = current.parent
+      parent.remove_left if parent > current
+      parent.remove_right if parent < current
       return true
     # Hard - 2 children
     elsif current.full?
       pred = predecessor(current.val) 
       # Get current's parent
       parent = current.parent
-      current.remove_parent
       pred.remove_parent
-      # Assign current's parent to be the predecessor (for swapping)
-      parent = pred
       # Point the parent's left/right node to the predecessor
-      parent.left = pred if parent > pred
-      parent.right = pred if parent < pred
+      if parent
+        parent.left = pred if parent > pred
+        parent.right = pred if parent < pred
+        pred.parent = parent
+      end
+      if current.left != pred
+       pred.left = current.left
+       pred.size += current.left.size
+       current.left.parent = pred
+      end
+      if current.right != pred
+        pred.right = current.right
+        pred.size += current.right.size
+        current.right.parent = pred
+      end
+      @root = pred if current == @root
+      # Delete all associations of the node tagged
+      current.remove_all
       return true
     # Medium - 1 child 
     else
@@ -111,6 +126,10 @@ class BinarySearchTree
       parent.left = child if current < parent
       return true
     end
+  end
+
+  def delete(val)
+    @root = delete_helper!(@root, val)
   end
 
   # Define min/max methods
@@ -185,3 +204,8 @@ class BinarySearchTree
     end
   end
 end
+
+b = BinarySearchTree.new
+b.insert 10, 7, 8, 6, 9, 13, 12, 11, 14
+b.delete 10
+b
