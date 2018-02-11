@@ -41,16 +41,16 @@
 ```
 
 ### Deletion
-- Search for `k`
+Search for `k`, then:
 1. Easy case (`k` has no children): just delete `k`'s node from tree
 2. Medium case (`k` has one child):  
-  - Just "splice out" `k`'s node, unique child assumes position previously held
+    - Just "splice out" `k`'s node, unique child assumes position previously held
 3. Hard case (`k` has 2 children):
-  - Compute `k`'s predecessor `l`
-      - [traverse `k`'s non-`NULL` left child pointer, then right child pointers
-        until no longer possible]
-  - Swap `k` and `l`
-  - Delete or splice out `k`'s new node
+    - Compute `k`'s predecessor `l`
+        - [traverse `k`'s non-`NULL` left child pointer, then right child 
+          pointers until no longer possible]
+    - Swap `k` and `l`
+    - Delete or splice out `k`'s new node
 
 ### Select and Rank
 - Select: find `i`-th order statistic  
