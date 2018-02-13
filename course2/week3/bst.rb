@@ -5,12 +5,10 @@ class BinarySearchTree
     # Requires implementing '<=>' method
     include Comparable
 
-    attr_reader :val
-    attr_accessor :left, :right, :size, :parent
+    attr_accessor :left, :right, :size, :val
 
-    def initialize(val, parent)
+    def initialize(val)
       @val = val
-      @parent = parent
       @size = 0
     end
 
@@ -26,19 +24,6 @@ class BinarySearchTree
       left.each(&block) if left
       block.call(self)
       right.each(&block) if right
-    end
-
-    [:@left, :@right, :@parent].each do |a|
-      m = a.to_s.gsub('@', '')
-      define_method "remove_#{m}" do
-        remove_instance_variable(a)
-      end
-    end
-
-    def remove_all
-      remove_left
-      remove_right
-      remove_parent
     end
 
     def <=>(other_node)
@@ -73,63 +58,7 @@ class BinarySearchTree
   end
 
   def delete(val)
-    current = search(val)
-    return if current.nil?
-
-    binding.pry
-    # Easy case - no children
-    if current.empty?
-      parent = current.parent
-      parent.remove_left if parent > current
-      parent.remove_right if parent < current
-      return true
-    # Hard - 2 children
-    elsif current.full?
-      pred = predecessor(current.val) 
-      # Get current's parent
-      parent = current.parent
-      pred.remove_parent
-      # Point the parent's left/right node to the predecessor
-      if parent
-        parent.left = pred if parent > pred
-        parent.right = pred if parent < pred
-        pred.parent = parent
-      end
-      if current.left != pred
-       pred.left = current.left
-       pred.size += current.left.size
-       current.left.parent = pred
-      end
-      if current.right != pred
-        pred.right = current.right
-        pred.size += current.right.size
-        current.right.parent = pred
-      end
-      @root = pred if current == @root
-      # Delete all associations of the node tagged
-      current.remove_all
-      return true
-    # Medium - 1 child 
-    else
-      parent = current.parent
-      current.remove_parent
-      child = nil
-      if current.left
-        child = current.left
-        current.remove_left
-      else
-        child = current.right
-        current.remove_right
-      end
-      child.remove_parent
-      parent.right = child if current > parent
-      parent.left = child if current < parent
-      return true
-    end
-  end
-
-  def delete(val)
-    @root = delete_helper!(@root, val)
+    @root = delete_helper!(@root, Node.new(val))
   end
 
   # Define min/max methods
@@ -143,32 +72,31 @@ class BinarySearchTree
     end
   end
 
-  # Defines predecessor/successor methods
-  # For example: 
-  # Lookup direction for pred starts on left, then goes right
-  # Predecessor < parent
-  lookup_dirs = { 
-      predecessor: [:left, :right, :<], 
-      successor: [:right, :left, :>] 
-  }
-  lookup_dirs.each do |k, v|
-    define_method k do |val|
-      current = search(val)
-      return if current.nil?
+  # Finding the predecessor works by two operations:
+  # 1. Make the first left
+  # 2. Keep going right after that
+  def predecessor(val, r = @root)
+    return nil if r.nil?
 
-      if current.send(v[0])
-        current = current.send(v[0])
-        while current
-          return current if current.send(v[1]).nil?
-          current = current.send(v[1])
-        end
-      else
-        while current
-          return nil if current.parent.nil?
-          return current.parent if current.parent.send(v[2], current)
-          current = current.parent
-        end
-      end
+    if r.val >= val 
+      return predecessor(val, r.left)
+    else
+      right = predecessor(val, r.right)
+      return (right || r)
+    end
+  end
+
+  # Finding the successor works by two operations:
+  # 1. Make the first right down the tree
+  # 2. Keep going left after that
+  def successor(val, r = @root)
+    return nil if r.nil?
+
+    if r.val <= val
+      return successor(val, r.right)
+    else
+      left = successor(val, r.left)
+      return (left || r)
     end
   end
 
@@ -183,29 +111,83 @@ class BinarySearchTree
     in_order_helper!(node.left) + [node.val] + in_order_helper!(node.right)
   end
 
-  def insert_helper(rt, val, p = nil)
+  def insert_helper(rt, val)
     # If root is nil, then assign the value to a new Node 
     if rt.nil?
-      yield Node.new(val, p)
+      yield Node.new(val)
     else
       # Otherwise perform the recursive call, passing a block that 
       # adds the new node to the correct side of the parent
-      # Also assigns the parent for each node
       case
       when val < rt.val
         rt.size += 1
-        insert_helper(rt.left, val, rt) { |v| rt.left = v }
+        insert_helper(rt.left, val) { |v| rt.left = v }
       when val > rt.val
         rt.size += 1
-        insert_helper(rt.right, val, rt) { |v| rt.right = v }
+        insert_helper(rt.right, val) { |v| rt.right = v }
       else
         raise 'Duplicate insertion!'
       end
     end
   end
-end
 
-b = BinarySearchTree.new
-b.insert 10, 7, 8, 6, 9, 13, 12, 11, 14
-b.delete 10
-b
+  # We are essentially recursing down the tree starting at the root
+  # Once we find the node we want to delete we call the 'remove' method
+  def delete_helper!(tnode, node)
+    if tnode == node
+      tnode = remove(tnode)
+    elsif node < tnode
+      tnode.left = delete_helper!(tnode.left, node)
+    else
+      tnode.right = delete_helper!(tnode.right, node)
+    end
+    tnode
+  end
+
+  # This method checks for the node's children and assigns them correctly
+  # The first three conditionals take care of 0-1 children
+  # The last will take care of 2 children
+  def remove(node)
+    if node.left.nil? && node.right.nil?
+      node = nil
+    elsif node.left && node.right.nil?
+      node = node.left
+    elsif node.left.nil? && node.right
+      node = node.right
+    else
+      node = replace_parent(node)
+    end
+    node
+  end
+
+  # We re-assign the value of the node to equal its successor
+  # Then jump over the successor, effectively 'swapping' the nodes
+  # We also assign the successor all the branches it's replacing
+  # (including size)
+  def replace_parent(node)
+    succ = successor(node.val)
+    succ_successor = successor(succ.val)
+    update_size(node)
+
+    succ.size = node.size
+    succ.right = node.right
+    succ.left = node.left
+    succ_successor.left = nil
+    succ
+  end
+
+  # This works like finding the successor, but instead we're updating the size
+  # of the nodes 
+  def update_size(node, r = @root)
+    return nil if r.nil?
+
+    if r <= node
+      r.size -= 1
+      return update_size(node, r.right)
+    else
+      r.size -= 1
+      left = update_size(node, r.left)
+      return (left || r)
+    end
+  end
+end
