@@ -9,7 +9,7 @@ class BinarySearchTree
 
     def initialize(val)
       @val = val
-      @size = 0
+      @size = 1
     end
 
     def full?
@@ -58,7 +58,7 @@ class BinarySearchTree
   end
 
   def delete(val)
-    @root = delete_helper!(@root, Node.new(val))
+    @root = delete_helper(@root, Node.new(val))
   end
 
   # Define min/max methods
@@ -100,15 +100,51 @@ class BinarySearchTree
     end
   end
 
+  def select(i, r = @root)
+    select_helper(i, r)
+  end
+
+  # Retrieves data in sorted order
   def in_order_traversal(r = @root)
-    in_order_helper!(r)
+    in_order_helper(r)
+  end
+
+  def pre_order_traversal(r = @root)
+    pre_order_helper(r)
+  end
+
+  def post_order_traversal(r = @root)
+    post_order_helper(r)
   end
 
   private
 
-  def in_order_helper!(node)
+  def select_helper(i, node)
+    a = node.left ? node.left.size : 0 
+
+    if i == a - 1
+      return node
+    elsif a >= i
+      return select_helper(i, node.left)
+    else
+      i = i - a - 1
+      return select_helper(i, node.right)
+    end
+  end
+
+  def in_order_helper(node)
     return [] unless node
-    in_order_helper!(node.left) + [node.val] + in_order_helper!(node.right)
+    in_order_helper(node.left) + [node.val] + in_order_helper(node.right)
+  end
+
+  def pre_order_helper(node)
+    return [] unless node
+    [node.val] + pre_order_helper(node.left) + pre_order_helper(node.right)
+  end
+
+  def post_order_helper(node)
+    return [] unless node
+    post_order_helper(node.left) + post_order_helper(node.right) + [node.val]
   end
 
   def insert_helper(rt, val)
@@ -133,13 +169,13 @@ class BinarySearchTree
 
   # We are essentially recursing down the tree starting at the root
   # Once we find the node we want to delete we call the 'remove' method
-  def delete_helper!(tnode, node)
+  def delete_helper(tnode, node)
     if tnode == node
       tnode = remove(tnode)
     elsif node < tnode
-      tnode.left = delete_helper!(tnode.left, node)
+      tnode.left = delete_helper(tnode.left, node)
     else
-      tnode.right = delete_helper!(tnode.right, node)
+      tnode.right = delete_helper(tnode.right, node)
     end
     tnode
   end
@@ -180,12 +216,11 @@ class BinarySearchTree
   # of the nodes 
   def update_size(node, r = @root)
     return nil if r.nil?
+    r.size -= 1
 
     if r <= node
-      r.size -= 1
       return update_size(node, r.right)
     else
-      r.size -= 1
       left = update_size(node, r.left)
       return (left || r)
     end

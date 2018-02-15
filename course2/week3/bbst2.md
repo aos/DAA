@@ -66,7 +66,7 @@ Example augmentation: `size(x)` = number of # tree nodes in subtree rooted @ `x`
 - Start at root `x`, with children `y` and `z`
 - let `a = size(y)` [a = 0, if `x` has no left child]
 - if `a = i - 1`, return `x`'s key
-- if `a ≥ 1`, recursively compute `i`-th order statistic of search tree rated at
+- if `a ≥ i`, recursively compute `i`-th order statistic of search tree rated at
   `y`
 - if `a < i - 1`, recursively compute `(i - a - 1)`-th order statistic of search
   tree rated at `z`
