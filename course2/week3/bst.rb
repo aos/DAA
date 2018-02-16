@@ -12,14 +12,6 @@ class BinarySearchTree
       @size = 1
     end
 
-    def full?
-      left && right
-    end
-
-    def empty?
-      left.nil? && right.nil?
-    end
-
     def each(&block)
       left.each(&block) if left
       block.call(self)
@@ -100,8 +92,14 @@ class BinarySearchTree
     end
   end
 
+  # Finds i-th element in tree
   def select(i, r = @root)
     select_helper(i, r)
+  end
+
+  # Finds how many nodes are less than or equal to key in tree
+  def rank(i, r = @root)
+    rank_helper(i, r)
   end
 
   # Retrieves data in sorted order
@@ -122,13 +120,26 @@ class BinarySearchTree
   def select_helper(i, node)
     a = node.left ? node.left.size : 0 
 
-    if i == a - 1
+    if a == i - 1
       return node
     elsif a >= i
       return select_helper(i, node.left)
     else
       i = i - a - 1
       return select_helper(i, node.right)
+    end
+  end
+
+  def rank_helper(i, node, s = 0)
+    if i > node.val
+      a = node.left ? node.left.size : 0
+      a += s + 1
+      return rank_helper(i, node.right, a)
+    elsif i < node.val
+      return rank_helper(i, node.left, s)
+    else
+      a = node.left ? node.left.size : 0
+      return s += a
     end
   end
 
