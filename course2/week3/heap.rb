@@ -1,12 +1,17 @@
-# A min-heap is a rooted, binary, tree, as complete as possible
+# A heap is a rooted, binary, tree, as complete as possible
 
-# All operations (insert, extract-min) must satisfy the heap property:
-# Every node must be less than or equal to its children
-# The root therefore contains the most minimum value
-class MinHeap
+# All operations (insert, extract) must satisfy the heap property:
+# Every node must be less/greater than or equal to its children
+# The root therefore contains the most minimum/maximum value
+class Heap
 
-  def initialize
+  # An optional block can be passed to define the function that maintains
+  # the heap property. By default, this will be a min-heap
+  # @example
+  #   minheap = Heap.new { |x, y| (x <=> y) == -1 }
+  def initialize(&block)
     @nodes = []
+    @compare_fn = block || lambda { |x, y| (x <=> y) == -1 }
   end
   
   def insert(key, value)
@@ -22,7 +27,7 @@ class MinHeap
     # Move the newly inserted node up the tree as long as
     # it is smaller than its parent
     unless size == 1
-      while @nodes[ins_i][:value] < @nodes[parent(ins_i)][:value]
+      while @compare_fn[@nodes[ins_i][:value], @nodes[parent(ins_i)][:value]]
         swap(parent(ins_i), ins_i)
         ins_i = parent(ins_i)
         break if ins_i == 0
@@ -32,7 +37,9 @@ class MinHeap
     ins_i
   end
 
-  def extract_min
+  # Extracts min/max based on what type of heap we specified in initialization
+  # @return [Value] the min/max value
+  def extract
     # 1. Extract root (guaranteed minimum value)
     root = @nodes.shift
     return root if empty? || size == 1
@@ -47,13 +54,21 @@ class MinHeap
     # larger than its parent(s), making sure along the way
     # that we have not reached any terminating leaves
     while min_child(new_r_i) && 
-          (@nodes[new_r_i][:value] > @nodes[min_child(new_r_i)][:value])
+        @compare_fn[@nodes[min_child(new_r_i)][:value], @nodes[new_r_i][:value]]
       temp_i = min_child(new_r_i)
       swap(new_r_i, temp_i)
       new_r_i = temp_i
       break unless new_r_i
     end
     root
+  end
+
+  # Double-splat operator allows (e: 40, d: 30, etc...)
+  def heapify(**val)
+    val.each do |k, v|
+      insert(k, v)
+    end
+    val.length
   end
 
   def delete(k)
@@ -97,7 +112,7 @@ class MinHeap
     ch_o = (index * 2) + 1
 
     if @nodes[ch_e] && @nodes[ch_o]
-      @nodes[ch_e][:value] > @nodes[ch_o][:value] ? ch_o : ch_e
+      @compare_fn[@nodes[ch_e][:value], @nodes[ch_o][:value]] ? ch_e : ch_o
     elsif @nodes[ch_e]
       ch_e
     elsif @nodes[ch_o]

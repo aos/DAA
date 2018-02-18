@@ -1,13 +1,16 @@
-require_relative '../rds/pqueue.rb'
-require_relative '../rds/graph_builder.rb'
-require_relative '../week3/minheap.rb'
+# Puts the expanded path where the parent directory resides
+folder = File.expand_path('../', __dir__)
+# Adds that path to $LOAD_PATH so we can 'require' the file
+$:.unshift(folder) unless $:.include?(folder)
+
+require 'rds/graph_builder'
+require 'week3/heap'
 
 class Dijkstra
   
   def initialize(file_name)
     @graph = GraphBuilder.new(file_name).build
-    # @pq = PriorityQueue.new
-    @heap = MinHeap.new
+    @minheap = Heap.new
     @dist = Hash.new(Float::INFINITY)
     @preds = Hash.new
   end
@@ -15,17 +18,14 @@ class Dijkstra
   def find_shortest(source = 1)
     # Initialize source vertex
     @dist[source] = 0
-    # @pq.enqueue(source, @dist[source])
-    @heap.insert(source, @dist[source])
+    @minheap.insert(source, @dist[source])
 
     # Get adjacency list and lengths
     adj_list = @graph.get_list
     edge_lengths = @graph.get_lengths
 
-    # until @pq.empty?
-    until @heap.empty?
-      # curr = @pq.dequeue[:item]
-      curr = @heap.extract_min[:key]
+    until @minheap.empty?
+      curr = @minheap.extract[:key]
       # Get neighboring vertices
       neighbors = adj_list[curr]
       # '&.' is safe navigation operator -- only called if 'neighbors' exists
@@ -38,8 +38,7 @@ class Dijkstra
         if tent_dist < @dist[vert]
           @dist[vert] = tent_dist
           @preds[vert] = curr
-          # @pq.enqueue(vert, @dist[vert])
-          @heap.insert(vert, @dist[vert])
+          @minheap.insert(vert, @dist[vert])
         end
       end
     end
@@ -50,7 +49,7 @@ class Dijkstra
   end
 end
 
-d = Dijkstra.new("./dijkstraData.txt")
+d = Dijkstra.new(File.expand_path('dijkstraData.txt', __dir__))
 result = d.find_shortest
 
 req = [7, 37, 59, 82, 99, 115, 133, 165, 188, 197]

@@ -44,11 +44,11 @@ Example: simulation (eg. for a video game)
 
 ### Median Maintenance
 **Received**: A sequence of `x` numbers, one-by-one.  
-**Given**: At each time step `i`, the median of `x`.  
+**Output**: At each time step `i`, the median of `x`.  
 **Constraint**: Use `O(log i)` time at each step `i`.  
 **Solution**: Maintain 2 heaps:
 - `H_low`: supports *Extract-Max* -- smallest half of numbers
-- `H_high`: supports *Extract-Min* -- largest half of numbers
+- `H_high`: supports *Extract-Min* -- largest half of numbers  
 **Key idea**: Maintain invariant that ~~ 1/2 smallest (largest) elements in 
 `H_low` (`H_high`)
 - Rebalance: *Extract-Max* from `H_low` or *Extract-Min* from `H_high` and

@@ -1,4 +1,4 @@
-class BinarySearchTree
+class Trees
   class Node
     # Requires implementing 'each' method
     include Enumerable
@@ -26,7 +26,9 @@ class BinarySearchTree
       "Node with value: #{@val}"
     end
   end
+end
 
+class BinarySearch < Trees
   def initialize
     @root = nil
   end
