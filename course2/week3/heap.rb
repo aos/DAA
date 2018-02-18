@@ -1,20 +1,31 @@
-# A heap is a rooted, binary, tree, as complete as possible
-
-# All operations (insert, extract) must satisfy the heap property:
-# Every node must be less/greater than or equal to its children
-# The root therefore contains the most minimum/maximum value
 class Heap
+  # A heap is a rooted, binary, tree, as complete as possible
+  #
+  # All operations (insert, extract) must satisfy the heap property:
+  # 1. Every node must be less/greater than or equal to its children
+  # 2. The root therefore contains the most minimum/maximum value
 
-  # An optional block can be passed to define the function that maintains
+  # The blocks that will be used as compares when :min/:max are passed into
+  # #initialize
+  # @see #initialize
+  TYPES = { min: lambda { |x, y| (x <=> y) == -1 },
+            max: lambda { |x, y| (x <=> y) == 1 } }
+
+  # An optional type can be passed to define the function that maintains
   # the heap property. By default, this will be a min-heap
   # @example
   #   minheap = Heap.new { |x, y| (x <=> y) == -1 }
-  def initialize(&block)
+  def initialize(t = :min)
     @nodes = []
-    @compare_fn = block || lambda { |x, y| (x <=> y) == -1 }
+    @compare_fn = TYPES[t]
   end
   
-  def insert(key, value)
+  # Inserts a key/value pair into heap
+  # @param [String, Symbol, Integer] Key/value pair to be inserted, if only one
+  # parameter is given, the key is set to the value 
+  # @return [Integer] The index at which the parameter was inserted
+  def insert(key, value = key)
+    raise ArgumentError, 'Heap keys must not be nil' unless key
     n = Hash[key: key, value: value]
     # 1. Append to end
     @nodes << n
@@ -36,6 +47,7 @@ class Heap
     # Return the final index of the inserted element after re-ordering
     ins_i
   end
+  [:<<, :push].each { |m| alias_method m, :insert }
 
   # Extracts min/max based on what type of heap we specified in initialization
   # @return [Value] the min/max value
@@ -62,8 +74,12 @@ class Heap
     end
     root
   end
+  alias_method :pop, :extract
 
-  # Double-splat operator allows (e: 40, d: 30, etc...)
+  # Creates a heap from passed in key/value pairs
+  # @param A key/value pair
+  # @example #heapify(c: 30, d: 40, e: 50)
+  # @return [Integer] Number of key/value pairs inserted
   def heapify(**val)
     val.each do |k, v|
       insert(k, v)
@@ -75,7 +91,9 @@ class Heap
     # TODO: Implement this
   end
 
-  def peek_min
+  # Peeks at the min/max value in heap
+  # @return the value of the min/max in heap, 'nil' if empty
+  def peek
     @nodes[0]
   end
 
@@ -89,6 +107,8 @@ class Heap
     sorted
   end
 
+  # Size of heap
+  # @return [Integer]
   def size
     @nodes.length
   end

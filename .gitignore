@@ -1,3 +1,5 @@
 *.html
 *.txt
 node_modules/
+doc/
+.yardoc/
