@@ -1,6 +1,7 @@
 # DAA
 
-Notes, problem sets, misc. for Stanford's [Design and Analysis of Algorithms](https://www.coursera.org/specializations/algorithms)
+Notes, problem sets, misc. for Stanford's [Design and Analysis of
+Algorithms](https://www.coursera.org/specializations/algorithms)
 
 #### Course 1: Divide and Conquer, Sorting and Searching, Randomized Algorithms
 - [x] Week 1: Big-O, Merge Sort
@@ -10,6 +11,14 @@ Notes, problem sets, misc. for Stanford's [Design and Analysis of Algorithms](ht
 
 #### Course 2: Graph Search, Shortest Paths, and Data Structures
 - [x] Week 1: BFS, DFS, Computing Strong Components
-- [ ] Week 2: Dijkstra's Shortest Path
-- [ ] Week 3: Heaps, Balanced Binary Search Trees
+- [x] Week 2: Dijkstra's Shortest Path
+- [x] Week 3: Heaps, Balanced Binary Search Trees
 - [ ] Week 4: Hashing, Hash Tables, Bloom Filters 
+
+#### Course 3: Greedy Algorithms, Minimum Spanning Trees, Dynamic Programming
+- [ ] Week 1: Intro to greedy algorithms, Prim's MST algorithm
+- [ ] Week 2: Kruskal's MST algorithm, applications to clustering, lazy union
+- [ ] Week 3: Huffman codes, introduction to dynamic programming
+- [ ] Week 4: Advanced dynamic programming
+
+#### Course 4: Shortest Paths Revisted, NP-Complete Problems
