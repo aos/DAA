@@ -28,7 +28,7 @@ class BloomFilter
   # @return [Boolean] always returns true
   def insert(s)
     @k.times do |i|
-      @bits[h_i(i, @m, s)] = 1
+      @bits[h_i(i, s)] = 1
     end
     true
   end
@@ -41,7 +41,7 @@ class BloomFilter
   #   keep in mind there is a small false positive error rate `ε`
   def lookup(s)
     @k.times do |i|
-      return false if @bits[h_i(i, @m, s)] == 0
+      return false if @bits[h_i(i, s)] == 0
     end
     true
   end
@@ -53,12 +53,11 @@ class BloomFilter
   # @private
   # @param 
   #   i: number of hash function
-  #   m: length of bit array
   #   s: string to be hashed
   # @return [Integer] Bucket in vector to store our string
-  def h_i(i, m, s)
+  def h_i(i, s)
     sha256 = Digest::SHA256.new
     sha256 << s << i.to_s(2) # Ints take a parameter in #to_s for the base
-    return sha256.hexdigest.to_i(16).modulo(m)
+    return sha256.hexdigest.to_i(16).modulo(@m)
   end
 end

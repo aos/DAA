@@ -23,6 +23,18 @@ Also,
 e^(-k/b)]^k` (error rate `ε`), where `b` = # of bits per object
 
 **How to set `k`?**: For fixed `b`, `ε` is minimized by setting `k ≈ (ln 2) * b`  
-**Plugging back in**: `ε ≈ (1/2)^((ln 2) * b)` or `b ≈ 1.44 * log_2(1/ε)`
+**Plugging back in**: 
+```
+ε ≈ (1/2)^((ln 2) * b)
 
+b ≈ 1.44 * log_2(1/ε)
+
+k ≈ (ln 2) * b
+```
 **Example**: With `b = 8`, choose `k = 5 or 6`, error probability only ≈ `2%`
+
+## Creating a bloom filter:
+1. Choose error rate `ε` (`≤ 2%`?)
+2. Based on that, choose number of `b` (bits) per object  
+   (Alternatively start here if space is your main concern)
+3. Choose `k` based on `b`
