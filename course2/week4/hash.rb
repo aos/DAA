@@ -6,6 +6,7 @@ require 'digest'
 # Initialize with number of buckets, preferably a prime # that is some constant
 # factor of the number of objects that will be stored in the table
 class HashTable
+  include Enumerable
 
   # Node used to contain each item in the hash table, has a 'next' value which
   # will point to the next node in the list (uses separate chaining strategy for
@@ -63,6 +64,21 @@ class HashTable
       current = current.next
     end
     false
+  end
+
+  # Defines 'each' method on hash table. Allows for yielding all nodes down the
+  # bucket chain (if they exist)
+  def each
+    if block_given?
+      @table.each do |curr|
+        while curr
+          yield curr
+          curr = curr.next
+        end
+      end
+    else
+      return @table.each
+    end
   end
 
   private
