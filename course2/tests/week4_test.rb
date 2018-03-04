@@ -3,7 +3,6 @@ require_relative '../week4/hash'
 
 class Test2SumSolution < MiniTest::Test
   DATA_PATH = '../week4/2-sum-data.txt'.freeze
-  TEST_PATH = '../tests/input_random_40_5120.txt'.freeze
 
   def setup
     @range = -10_000..10_000
@@ -24,8 +23,7 @@ class Test2SumSolution < MiniTest::Test
   end
 
   def test_solution
-    puts "\nStarted computing solution @ #{Time.now}..."
-    sum_total = 0
+    num_targets = 0
 
     # Target value must be between [-10000, 10000]
     # Answer: between 0 and 20001
@@ -33,8 +31,6 @@ class Test2SumSolution < MiniTest::Test
     # Your task is to compute the number of target values 't' in the interval
     # [-10000,10000] (inclusive) such that there are distinct numbers x,y in the
     # input file that satisfy x+y=t.
-    # NOTE: I only test 5120 in this file, as the 1000000 integer file would
-    # require a running time of O(range * N) which... would take forever
 
     @range.each do |r_num|
       @ht.each do |x|
@@ -47,7 +43,6 @@ class Test2SumSolution < MiniTest::Test
         end
       end
     end
-    puts "Solution found @ #{Time.now}"
-    puts "Soultion: #{sum_total}"
+    assert_equal num_targets, 427
   end
 end

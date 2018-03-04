@@ -1,8 +1,5 @@
 const fs = require('fs');
 const swap = (array, i, j) => [array[i], array[j]] = [array[j], array[i]] 
-const median = (a, b, c) => {
-  let arr = [a, b, c].sort();
-  return arr[1]; }
 
 const quickSort = (array, l = 0, r = array.length) => {
 
