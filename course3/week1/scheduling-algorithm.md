@@ -22,6 +22,18 @@
 - Increasing in weight (prefer larger weight)
 - Decreasing in length (prefer small length)
 
-**Guess 1**: Order jobs by decreasing value of `w_j - l_j`
+**Guess 1**: Order jobs by decreasing value of `w_j - l_j` (difference)  
+**Guess 2**: Order `(w_j)/(l_j)` (ratio)
 
-**Guess 2**: Order `(w_j)/(l_j)`
+## Breaking a Greedy Algorithm
+
+To distinguish `1` and `2`: Find an example where the two algorithms produce
+different outputs (at least one will be incorrect).
+
+**Example**:
+```
+l_1 = 5       l_2 = 2
+w_1 = 3       w_2 = 1
+```
+What is the sum of weighted completion times of algorithms `1` and `2`,
+respectively?
