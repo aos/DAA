@@ -13,7 +13,7 @@ Algorithms](https://www.coursera.org/specializations/algorithms)
 - [x] Week 1: BFS, DFS, Computing Strong Components
 - [x] Week 2: Dijkstra's Shortest Path
 - [x] Week 3: Heaps, Balanced Binary Search Trees
-- [ ] Week 4: Hashing, Hash Tables, Bloom Filters 
+- [x] Week 4: Hashing, Hash Tables, Bloom Filters 
 
 #### Course 3: Greedy Algorithms, Minimum Spanning Trees, Dynamic Programming
 - [ ] Week 1: Intro to greedy algorithms, Prim's MST algorithm

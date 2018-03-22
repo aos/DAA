@@ -32,8 +32,35 @@ different outputs (at least one will be incorrect).
 
 **Example**:
 ```
+Job 1         Job 2
+-------       -------
 l_1 = 5       l_2 = 2
 w_1 = 3       w_2 = 1
 ```
 What is the sum of weighted completion times of algorithms `1` and `2`,
-respectively?
+respectively?  
+**Algorithm 1**:
+1. 3 - 5 = `-2`
+2. 1 - 2 = `-1` - winner `Job 2`
+**Algorithm 2**:
+1. `3/5` - winner `Job 1`
+2. `1/2`
+
+Weight sum of completion times using algorithms:  
+1. Algorithm 1
+```
+Job 2 -> Job 1
+Completion times: 2 -> 7
+Weighted sum: (1 * 2) + (3 * 7) = 2 + 21 = 23
+```
+2. Algorithm 2
+```
+Job 1 -> Job 2
+Completion times: 5 -> 7
+Weighted sum: (3 * 5) + (1 * 7) = 15 + 7 = 22
+```
+
+## Story So Far
+
+Algorithm #1 not (always) correct. Algorithm #2 (ordering by ratio) is always
+correct.

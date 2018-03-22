@@ -8,7 +8,7 @@ class PriorityQueue
     ele = Hash[item: item, priority: priority]
     return @items << ele if @items.length == 0
 
-    @items.each.with_index do |item, index|
+    @items.each_with_index do |item, index|
       if ele[:priority] < item[:priority]
         return @items.insert(index, ele)
       end
