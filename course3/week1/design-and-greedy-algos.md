@@ -20,7 +20,7 @@
 in the end
 
 **Example**: Dijkstra's shortest path
--processed each destination once, irrevocably
+- Processed each destination once, irrevocably
 
 ### Contrast with divide & conquer
 1. Easy to propose multiple greedy algorithms for many problems

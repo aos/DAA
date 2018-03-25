@@ -31,18 +31,18 @@ To distinguish `1` and `2`: Find an example where the two algorithms produce
 different outputs (at least one will be incorrect).
 
 **Example**:
-```
-Job 1         Job 2
--------       -------
-l_1 = 5       l_2 = 2
-w_1 = 3       w_2 = 1
-```
+|              | Job 1 | Job 2 |
+| -            | :---: | :---: |
+| length (`l`) | 5     | 2     |
+| weight (`w`) | 3     | 1     |
+
 What is the sum of weighted completion times of algorithms `1` and `2`,
 respectively?  
-**Algorithm 1**:
+**Algorithm 1 (difference)**:
 1. 3 - 5 = `-2`
 2. 1 - 2 = `-1` - winner `Job 2`
-**Algorithm 2**:
+
+**Algorithm 2 (ratio)**:
 1. `3/5` - winner `Job 1`
 2. `1/2`
 

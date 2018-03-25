@@ -32,4 +32,4 @@ the cheapest edge of `G` that crosses it. Then `e` belongs to the MST of `G`.
 **Cut property implies correctness**: every edge `e ∈ T*` is explicitly
 justified by the cut property!  
 ⇒ `T*` is a subset of the MST  
-⇒ Since `T*` is already a spanning tree, it must be the *MST*
+⇒ Since `T*` is already a spanning tree, it must be the **MST**
