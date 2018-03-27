@@ -1,5 +1,5 @@
 require 'minitest/autorun'
-require '../assignments/scheduling'
+require_relative '../assignments/scheduling'
 
 class TestSchedulingSolution < MiniTest::Test
   DATA_PATH = '../assignments/problem-data/jobs.txt'

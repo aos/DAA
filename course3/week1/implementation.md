@@ -6,7 +6,8 @@ Pseudocode:
 - T = 0                       # Invariant: X = vertices spanned by tree so far
 - while X != V:
   - let e = (u, v) be the cheapest edge of G with u ∈ X, v ∉ X
-  - add e to T, add v to X
+  - add e to T
+  - add v to X
 ```
 
 **Running time of straight forward implementation**:
@@ -16,6 +17,7 @@ Pseudocode:
 
 ## Using heaps to speed up Prim's
 - Raison d'etre of a heap is to speed up repeated minimum computations
+- **Natural idea**: Use a heap to store edges, with keys = edge costs
 
 ## Prim's Algorithm with Heaps
 **Invariant #1**: Elements in heap = vertices of `V - X`  

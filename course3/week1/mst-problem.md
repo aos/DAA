@@ -24,9 +24,9 @@
 **Output**: Minimum cost tree `T ⊆ E` that spans all vertices  
 `cost`: Sum of edge costs
 
-**I.e.**: 
+## Properties of MST (`T`)
 1. `T` has no cycles
-2. The subgraph (V, T) is connected → contains path between each pair of
+2. The subgraph `(V, T)` is connected → contains path between each pair of
    vertices (spans all vertices)
 
 ## Standing Assumptions
