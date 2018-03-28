@@ -5,10 +5,9 @@ class TestMSTSolution < MiniTest::Test
   DATA_PATH = './problem-data/edges.txt'
 
   def setup
-    heap_obj = EdgeHeapBuilder.new(DATA_PATH)
-    @heap = heap_obj.heap
-    @num_edges = heap_obj.num_edges
-    @num_nodes = heap_obj.num_nodes
+    @hash_obj = HashBuilder.new(DATA_PATH)
+    @num_edges = @hash_obj.num_edges
+    @num_nodes = @hash_obj.num_nodes
   end
 
   def test_gets_all_edges
@@ -20,6 +19,7 @@ class TestMSTSolution < MiniTest::Test
   end
 
   def test_gets_cost_mst
-
+    mst = MST.new(@hash_obj).total_cost
+    assert_equal mst, -3612829
   end
 end
