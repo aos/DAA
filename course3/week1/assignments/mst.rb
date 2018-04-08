@@ -1,5 +1,4 @@
 require_relative '../../../course2/week3/heap'
-require 'byebug'
 
 # Builds a minimum spanning tree (MST) from a given heap_builder object
 # Expects the heap_builder object to contain #heap
