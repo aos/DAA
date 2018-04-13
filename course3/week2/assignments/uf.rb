@@ -24,38 +24,52 @@
 class UnionFind
 
   def initialize
-    @parent_map = Hash.new
+    @node_map = Hash.new
   end
 
   def make_set(x)
     # Only create new set if node does not exist
-    unless @parent_map[x]
+    unless @node_map[x]
       node = Node.new(x) 
-      @parent_map[x] = node
+      @node_map[x] = node
     end
   end
 
   def find(x)
-    node = @parent_map[x]
-    return node if node.parent = @parent_map[x]
+    node = @node_map[x]
+    return node.parent if node.parent == node.parent.parent
 
+    # Store traversed nodes in array
     traversed = [node]
     until node.parent == node
       traversed << node
       node = node.parent
     end
+    # Apply path compression to traversed nodes and return root
     compress(traversed, node)
-    return node
   end
 
   def union(x, y)
+    root_x = find(x)
+    root_y = find(y)
+    return false if root_x == root_y # Same root, same set
 
+    if root_x.rank > root_y.rank
+      @node_map[root_y.key].parent = @node_map[y].parent = root_x
+    elsif root_y.rank > root_x.rank
+      @node_map[root_x.key].parent = @node_map[x].parent = root_y
+    else
+      @node_map[root_y.key].parent = @node_map[y].parent = root_x
+      root_x.rank += 1
+    end
+    true
   end
 
   private
 
-  def compress(z, r)
-    z.each { |node| @parent_map[node.key] = node.parent = r }
+  def compress(trav, root)
+    trav.each { |node| node.parent = root }
+    root
   end
 end
 
