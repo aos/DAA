@@ -1,5 +1,6 @@
 require 'minitest/autorun'
 require_relative 'mst'
+require_relative '../../hash-builder'
 
 class TestMSTSolution < MiniTest::Test
   DATA_PATH = './problem-data/edges.txt'

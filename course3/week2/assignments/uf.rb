@@ -39,7 +39,7 @@ class UnionFind
     node = @node_map[x]
     return node.parent if node.parent == node.parent.parent
 
-    # Store traversed nodes in array
+    # Follow parent pointers to root, store traversed nodes in array
     traversed = [node]
     until node.parent == node
       traversed << node
