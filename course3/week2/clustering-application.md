@@ -21,7 +21,8 @@ etc.) classify into "coherent groups" (aka *unsupervised learning*)
 
 Call points `p` & `q` *separated* if they're assigned to different clusters.
 
-**Definition** The **spacing** of a k-clustering is:
+**Definition** The **spacing** of a k-clustering (the closest pair of
+separated points):
 ```
    min
 separated d(p,q)            (the bigger, the better)
