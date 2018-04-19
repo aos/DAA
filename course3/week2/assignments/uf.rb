@@ -29,14 +29,14 @@ class UnionFind
 
   def make_set(x)
     # Only create new set if node does not exist
-    unless @node_map[x]
-      node = Node.new(x) 
-      @node_map[x] = node
-    end
+    return false if @node_map[x]
+    node = Node.new(x) 
+    @node_map[x] = node
   end
 
   def find(x)
     node = @node_map[x]
+    return false unless node
     return node.parent if node.parent == node.parent.parent
 
     # Follow parent pointers to root, store traversed nodes in array
@@ -52,7 +52,7 @@ class UnionFind
   def union(x, y)
     root_x = find(x)
     root_y = find(y)
-    return false if root_x == root_y # Same root, same set
+    return false unless (root_x && root_y) && (root_x != root_y)
 
     if root_x.rank > root_y.rank
       @node_map[root_y.key].parent = @node_map[y].parent = root_x

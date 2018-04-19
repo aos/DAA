@@ -1,4 +1,4 @@
-require_relative './uf'
+require_relative 'uf'
 
 # Computes the max-spacing k-clustering
 class KCluster
