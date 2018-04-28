@@ -8,6 +8,7 @@ class TestKClusterSolution < MiniTest::Test
     @bc = BitCluster.new(DATA_PATH)
   end
 
+  # Runtime = 531 seconds
   def test_gets_all_nodes_and_k
     @k = @bc.find_k
     @num_nodes = @bc.num_nodes
