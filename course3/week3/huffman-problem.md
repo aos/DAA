@@ -24,4 +24,4 @@
 - `L(T)` = average encoding length
 - **Example**: if `p_A` = 60%, `p_B` = 25%, `p_C` = 10%, `p_D` = 5%, then `L =
     1.55`
-- **Output**: a binary tree `T` minimizing the average encoding length `L(i)`
+- **Output**: a binary tree `T` minimizing the average encoding length `L(T)`
