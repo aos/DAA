@@ -26,10 +26,18 @@ Given frequencies `p_i` as input:
 ```
 If |Σ| = 2, return a-0-N-1-b binary tree
 Let a,b ∈ Σ have the smallest frequencies
-Let Σ' = Σ with a,b replaced by new symbol ab
+Let Σ` = Σ with a,b replaced by new symbol ab
 Define p_ab = p_a + p_b
-Recursively compute T' (for the alphabet Σ')
-Extend T' (with leaves <-> Σ') to a tree T with leaves <-> Σ
+Recursively compute T` (for the alphabet Σ`)
+Extend T` (with leaves ↔ Σ`) to a tree T with leaves ↔ Σ
   by splitting leaf ab into two leaves a & b 
 Return T
 ```
+
+## Implementation and Running Time
+- Because we're doing repeated minimum computations (by getting the lowest
+    frequencies), use a **heap**.
+    - **Key** = frequency
+- After extracting the two smallest frequency symbols, re-insert the new
+    meta-symbol [new key = sum of the 2 old ones]
+- **Iterative**, running in `O(n log n)` time
