@@ -1,21 +1,8 @@
 # Your task in this problem is to run the Huffman coding algorithm from lecture
 # on this data set. What is the maximum length of a codeword in the resulting
 # Huffman code?
-from heapq import heappush, heappop
 
 DATA_PATH = 'problem-data/huffman.txt'
-
-class Node:
-    """An element of a binary tree"""
-    def __init__(self, value):
-        self.value = value
-
-    def left(self, left=None):
-        self.left = left
-
-    def right(self, right=None):
-        self.right = right
-
 
 def main():
     total_sym = 0
@@ -28,7 +15,9 @@ def main():
             if index == 0:
                 total_sym = int(line)
             else:
-                heappush(h, int(line))
+                # Create a tuple of the weight of the symbol and its "name"
+                tup = (int(line), str(index))
+                heappush(h, tup)
 
     # Bottom-up
     # 2. Extract 2 symbols at a time
@@ -37,8 +26,9 @@ def main():
     while len(h) > 2:
         a = heappop(h)
         b = heappop(h)
-        c = a + b
-        # heappush(h, c)
+        c = (a[0] + b[0], '{0}-{1}'.format(a[1], b[1]))
+
+        heappush(h, c)
 
     # 3. Top-down
     # Expand all meta-symbols into sub-trees
