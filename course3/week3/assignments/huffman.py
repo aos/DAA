@@ -2,6 +2,9 @@
 # on this data set. What is the maximum length of a codeword in the resulting
 # Huffman code?
 
+from heapq import heappush, heappop
+from node import Node
+
 DATA_PATH = 'problem-data/huffman.txt'
 
 def main():
@@ -15,23 +18,32 @@ def main():
             if index == 0:
                 total_sym = int(line)
             else:
-                # Create a tuple of the weight of the symbol and its "name"
-                tup = (int(line), str(index))
-                heappush(h, tup)
+                # Create a node for each line with weight and push into heap
+                n = Node(int(line), line)
+                heappush(h, n)
 
-    # Bottom-up
-    # 2. Extract 2 symbols at a time
+    # 2. Bottom-up
+    # Extract 2 symbols at a time
     # Re-insert the new sum of 2 symbols into heap
-    # If 2 elements left, create tree
     while len(h) > 2:
         a = heappop(h)
         b = heappop(h)
-        c = (a[0] + b[0], '{0}-{1}'.format(a[1], b[1]))
+        total_weight = a.key + b.key
+        c = Node(total_weight, [a, b])
 
         heappush(h, c)
 
     # 3. Top-down
     # Expand all meta-symbols into sub-trees
+    left = heappop(h)
+    right = heappop(h)
+    # Create root node once 2 elements are left in heap
+    root = Node(1, 'root', left, right)
+
+    current = root
+
+    print(current.left.value[0])
+
 
 if __name__ == '__main__':
     main()
