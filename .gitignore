@@ -3,3 +3,5 @@
 node_modules/
 doc/
 .yardoc/
+__pycache__/
+*.pyc

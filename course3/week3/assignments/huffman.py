@@ -5,45 +5,44 @@
 from heapq import heappush, heappop
 from node import Node
 
-DATA_PATH = 'problem-data/huffman.txt'
+DATA_PATH = 'problem-data/small.txt'
+# Node:
+#   key [Integer]
+#   value [String]
+#   left [Node]
+#   right [Node]
 
-def main():
+def build_tree(file_path):
     total_sym = 0
     # Initialize heap
     h = []
 
     # 1. Add all symbols to heap
-    with open(DATA_PATH) as f:
+    with open(file_path) as f:
         for index, line in enumerate(f):
             if index == 0:
                 total_sym = int(line)
             else:
-                # Create a node for each line with weight and push into heap
-                n = Node(int(line), line)
+                # Create a Node for each line with weight and push into heap
+                n = Node(int(line), line.strip())
                 heappush(h, n)
 
     # 2. Bottom-up
     # Extract 2 symbols at a time
     # Re-insert the new sum of 2 symbols into heap
-    while len(h) > 2:
+    while len(h) > 1:
         a = heappop(h)
         b = heappop(h)
         total_weight = a.key + b.key
-        c = Node(total_weight, [a, b])
-
+        meta_symbol = '{}-{}'.format(a.value, b.value)
+        # Create "meta-symbol" Node and assign left & right Nodes as we climb up
+        c = Node(total_weight, meta_symbol, left=a, right=b)
         heappush(h, c)
 
-    # 3. Top-down
-    # Expand all meta-symbols into sub-trees
-    left = heappop(h)
-    right = heappop(h)
-    # Create root node once 2 elements are left in heap
-    root = Node(1, 'root', left, right)
-
-    current = root
-
-    print(current.left.value[0])
-
+    # One remaining Node in heap, this is our root
+    root = heappop(h)
+    print(root.value)
+    return total_sym, root
 
 if __name__ == '__main__':
-    main()
+    build_tree(DATA_PATH)
