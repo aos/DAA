@@ -1,5 +1,12 @@
 class Node:
-    """An element of a binary tree"""
+    """An element of a binary tree
+
+    Node:
+    - key [Integer]
+    - value [String]
+    - left [Node], default = None
+    - right [Node], default = None
+    """
     def __init__(self, key, value, left=None, right=None):
         self.key = key
         self.value = value

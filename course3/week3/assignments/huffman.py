@@ -5,14 +5,7 @@
 from heapq import heappush, heappop
 from node import Node
 
-DATA_PATH = 'problem-data/small.txt'
-# Node:
-#   key [Integer]
-#   value [String]
-#   left [Node]
-#   right [Node]
-
-def build_tree(file_path):
+def huffman(file_path):
     total_sym = 0
     # Initialize heap
     h = []
@@ -41,8 +34,7 @@ def build_tree(file_path):
 
     # One remaining Node in heap, this is our root
     root = heappop(h)
-    print(root.value)
     return total_sym, root
 
 if __name__ == '__main__':
-    build_tree(DATA_PATH)
+    huffman(DATA_PATH)
