@@ -35,6 +35,3 @@ def huffman(file_path):
     # One remaining Node in heap, this is our root
     root = heappop(h)
     return total_sym, root
-
-if __name__ == '__main__':
-    huffman(DATA_PATH)

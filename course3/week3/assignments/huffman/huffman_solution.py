@@ -2,7 +2,7 @@ import unittest
 from huffman import huffman
 from helpers import maxDepth, minDepth
 
-DATA_PATH = './problem-data/huffman.txt'
+DATA_PATH = '../problem-data/huffman.txt'
 
 class TestHuffmanSolution(unittest.TestCase):
 
