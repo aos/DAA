@@ -6,7 +6,7 @@
 - Return `S_1` or `S_2 ∪ {v_n}`, whichever is better
 
 **Important question**:  
-How many distinct subproblems ever get solved by this algorithm?  **O(n)**
+How many distinct subproblems ever get solved by this algorithm? **O(n)**
 - Only a linear # of distinct subproblems can be solved
 
 ## Eliminating redundancy
