@@ -4,8 +4,13 @@ import k_recursive
 
 DATA_PATH_Q1 = './problem-data/knapsack1.txt'
 DATA_PATH_Q2 = './problem-data/knapsack_big.txt'
+DATA_PATH_EX = './problem-data/example.txt'
 
 class TestKSolution(unittest.TestCase):
+
+    def test_get_EX(self):
+        k_recursive_soln = k_recursive.knapsack(DATA_PATH_EX)
+        self.assertEqual(k_recursive_soln, 8)
 
     def test_get_A1(self):
         k_iterative_soln = k_iterative.knapsack(DATA_PATH_Q1)
