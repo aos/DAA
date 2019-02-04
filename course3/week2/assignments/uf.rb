@@ -37,10 +37,9 @@ class UnionFind
   def find(x)
     node = @node_map[x]
     return false unless node
-    return node.parent if node.parent == node.parent.parent
 
     # Follow parent pointers to root, store traversed nodes in array
-    traversed = [node]
+    traversed = []
     until node.parent == node
       traversed << node
       node = node.parent

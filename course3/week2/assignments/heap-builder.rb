@@ -5,7 +5,7 @@ class HeapBuilder
   attr_reader :heap, :num_nodes
 
   def initialize(file)
-    @heap = Heap.new    
+    @heap = Heap.new
 
     File.open(file) do |file|
       file.each_with_index do |line, index|
