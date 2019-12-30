@@ -21,5 +21,5 @@
 ### Depth-first search (DFS) 
 > `O(m + n)` time using a stack
 - Explore aggresively like a maze, backtrack only when necessary
-- Compute topological ordering of directe acyclic graphs
+- Compute topological ordering of directed acyclic graphs
 - Compute connected components in direct graphs

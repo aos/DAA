@@ -27,8 +27,7 @@ class HashBuilder
         if index == 0
           @num_nodes, @num_edges = line_dirty
         else
-          # Destructure the array to grab the nodes into an array,
-          # and edge cost as a separate variable
+          # Destructure the array to grab the nodes and edge cost
           *nodes, edge_cost = line_dirty
           # Pick a random node as start
           @initial_node ||= nodes[0]
